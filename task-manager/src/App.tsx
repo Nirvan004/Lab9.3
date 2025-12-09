@@ -1,35 +1,89 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import type { Task, TaskStatus } from './types';
 
-function App() {
-  const [count, setCount] = useState(0)
+import { TaskList } from './components/TaskList/TaskList';
+import { TaskFilter } from './components/TaskFilter/TaskFilter';
+
+const initialTasks: Task[] = [
+  {
+    id: '1',
+    title: 'Study React',
+    description: 'Complete the React task manager project',
+    status: 'pending',
+    priority: 'high',
+    dueDate: '12-9-2025',
+  },
+  {
+    id: '2',
+    title: 'Buy groceries',
+    description: 'Milk, Bread, Eggs, Fruits',
+    status: 'in-progress',
+    priority: 'medium',
+    dueDate: '12-14-2025',
+  },
+  {
+    id: '3',
+    title: 'Clean room',
+    description: 'Organize desk & vacuum',
+    status: 'completed',
+    priority: 'low',
+    dueDate: '12-15-2025',
+  },
+];
+
+export const App: React.FC = () => {
+  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+
+  const [filters, setFilters] = useState<{
+    status?: TaskStatus;
+    priority?: 'low' | 'medium' | 'high';
+  }>({});
+
+  const handleStatusChange = (taskId: string, newStatus: TaskStatus) => {
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === taskId ? { ...task, status: newStatus } : task
+      )
+    );
+  };
+
+  const handleDelete = (taskId: string) => {
+    setTasks((prev) => prev.filter((task) => task.id !== taskId));
+  };
+
+  const handleFilterChange = (newFilters: {
+    status?: TaskStatus;
+    priority?: 'low' | 'medium' | 'high';
+  }) => {
+    setFilters((prev) => ({
+      ...prev,
+      ...newFilters,
+    }));
+  };
+
+  const filteredTasks = tasks.filter((task) => {
+    const matchStatus =
+      !filters.status || task.status === filters.status;
+
+    const matchPriority =
+      !filters.priority || task.priority === filters.priority;
+
+    return matchStatus && matchPriority;
+  });
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="app-container">
+      <h1 className="app-title">Task Manager</h1>
 
-export default App
+      <TaskFilter onFilterChange={handleFilterChange} />
+
+      <TaskList
+        tasks={filteredTasks}
+        onStatusChange={handleStatusChange}
+        onDelete={handleDelete}
+      />
+    </div>
+  );
+};
+
+export default App;
