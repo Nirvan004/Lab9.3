@@ -1,73 +1,56 @@
-# React + TypeScript + Vite
+Task Management App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project implements a small reusable component library using React, TypeScript, and simple CSS styling.
+Components include: TaskItem, TaskList, and TaskFilter.
+All components are strictly typed using TypeScript interfaces and demonstrate component composition, prop handling, event handling, conditional rendering, and reusable UI patterns.
 
-Currently, two official plugins are available:
+Components
+TaskItem
+Displays an individual task with its title, description, status, priority, and due date.
+Includes controls for changing the task’s status and deleting the task.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Props:
+type TaskStatus = "pending" | "in-progress" | "completed";
 
-## React Compiler
+interface TaskItemProps {
+  task: Task;
+  onStatusChange: (taskId: string, newStatus: TaskStatus) => void;
+  onDelete: (taskId: string) => void;
+}
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+TaskList
+Renders a list of TaskItem components. Handles proper key management and passes event handlers down to each TaskItem.
+Displays a message if no tasks match the current filters.
 
-## Expanding the ESLint configuration
+Props:
+interface TaskListProps {
+  tasks: Task[];
+  onStatusChange: (taskId: string, newStatus: TaskStatus) => void;
+  onDelete: (taskId: string) => void;
+}
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+TaskFilter
+Allows users to filter tasks by status and priority.
+Calls a callback whenever filter values change.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Props:
+interface TaskFilterProps {
+  onFilterChange: (filters: {
+    status?: TaskStatus;
+    priority?: 'low' | 'medium' | 'high';
+  }) => void;
+}
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Features
+Task list rendering with unique keys
+Filtering by status and priority
+Task status updates and deletions
+Visual indicators for task priority and status
+Conditional rendering for empty task lists
+Fully typed with TypeScript interfaces
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Styling
+Simple CSS with class-based styling (app.css)
+Hover and active states for buttons and task cards
+Priority badges with color coding
+Status text colored by task status
