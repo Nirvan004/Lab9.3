@@ -5,7 +5,7 @@ Components include: TaskItem, TaskList, and TaskFilter.
 All components are strictly typed using TypeScript interfaces and demonstrate component composition, prop handling, event handling, conditional rendering, and reusable UI patterns.
 
 Components
-TaskItem
+1.TaskItem
 Displays an individual task with its title, description, status, priority, and due date.
 Includes controls for changing the task’s status and deleting the task.
 
@@ -18,7 +18,7 @@ interface TaskItemProps {
   onDelete: (taskId: string) => void;
 }
 
-TaskList
+2.TaskList
 Renders a list of TaskItem components. Handles proper key management and passes event handlers down to each TaskItem.
 Displays a message if no tasks match the current filters.
 
@@ -29,7 +29,7 @@ interface TaskListProps {
   onDelete: (taskId: string) => void;
 }
 
-TaskFilter
+3.TaskFilter
 Allows users to filter tasks by status and priority.
 Calls a callback whenever filter values change.
 
