@@ -4,6 +4,8 @@ import type { Task, TaskStatus } from './types';
 import { TaskList } from './components/TaskList/TaskList';
 import { TaskFilter } from './components/TaskFilter/TaskFilter';
 
+import './app.css';
+
 const initialTasks: Task[] = [
   {
     id: '1',
